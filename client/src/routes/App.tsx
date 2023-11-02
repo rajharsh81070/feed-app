@@ -5,11 +5,21 @@ import NotFound from '../components/not-found/NotFound'
 import Toast from '../components/toast/Toast'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
+import Register from './register/Register'
 
 const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: '/',
     errorElement: <NotFound />,
   },
 ])

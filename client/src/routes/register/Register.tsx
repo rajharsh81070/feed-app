@@ -3,16 +3,18 @@ import logo from '../../assets/icon/logo.svg'
 import { useDispatch } from 'react-redux'
 import { setToast } from '../../redux/slice/global'
 import { ToastType } from '../../components/toast/Toast'
-import LoginBox from '../../components/login-box/LoginBox'
+import RegisterBox from '../../components/register-box/RegisterBox'
 
-const Login = () => {
+const Register = () => {
   const dispatch = useDispatch()
 
   const [formData, setFormData] = React.useState<{
     email: string
+    userName: string
     password: string
   }>({
     email: '',
+    userName: '',
     password: '',
   })
 
@@ -21,11 +23,21 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value.trim() }))
   }
 
-  const valideLoginInput = () => {
+  const valideRegisterInput = () => {
     if (!formData.email) {
       dispatch(
         setToast({
           message: 'Please enter your email',
+          type: ToastType.Failure,
+          duration: 3000,
+        })
+      )
+      return false
+    }
+    if (!formData.userName) {
+      dispatch(
+        setToast({
+          message: 'Please enter your user name',
           type: ToastType.Failure,
           duration: 3000,
         })
@@ -45,9 +57,9 @@ const Login = () => {
     return true
   }
 
-  const handleLogin = () => {
-    if (valideLoginInput()) {
-      console.log('Login')
+  const handleRegister = () => {
+    if (valideRegisterInput()) {
+      console.log('Register')
     }
   }
 
@@ -55,8 +67,8 @@ const Login = () => {
     <div className="bg-[#131319] flex justify-center flex-col items-center min-h-screen w-full h-full">
       <div className="flex flex-col items-center justify-center gap-12">
         <img src={logo} alt="logo" />
-        <LoginBox
-          handleLogin={handleLogin}
+        <RegisterBox
+          handleRegister={handleRegister}
           handleInputChange={handleInputChange}
           formData={formData}
         />
@@ -65,4 +77,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Register

@@ -35,7 +35,7 @@ export const InputBox = (props: IInputBoxProps) => {
   } = props
 
   return (
-    <div className="flex-shrink-0 flex flex-col items-start gap-2">
+    <div className="flex-shrink-0 flex flex-col items-start gap-2 min-w-full">
       <div className="w-full flex justify-between">
         <p className="text-[#C5C7CA] font-sans font-medium text-sm">
           {primaryLabel}
@@ -49,7 +49,7 @@ export const InputBox = (props: IInputBoxProps) => {
           </p>
         )}
       </div>
-      <div className="relative">
+      <div className="relative min-w-full">
         <input
           id={id}
           name={name}
@@ -58,7 +58,7 @@ export const InputBox = (props: IInputBoxProps) => {
           placeholder={placeholder}
           required={required}
           onChange={onInputChange}
-          className="sm:w-[412px] max-w-[100%] bg-inherit rounded-[4px] border-[1.5px] border-solid border-[#35373B] px-3 py-3 text-[#7F8084] text-base font-normal font-sans placeholder:text-[#7F8084] focus:outline-none focus:ring-2 focus:ring-[#969696] focus:border-transparent"
+          className="sm:w-[412px] min-w-full bg-inherit rounded-[4px] border-[1.5px] border-solid border-[#35373B] px-3 py-3 text-[#7F8084] text-base font-normal font-sans placeholder:text-[#7F8084] focus:outline-none focus:ring-2 focus:ring-[#969696] focus:border-transparent"
         />
         {type === 'password' && (
           <div
