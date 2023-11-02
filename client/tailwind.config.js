@@ -13,6 +13,9 @@ module.exports = {
       screens: {
         "2xl": "1440px",
       },
+      animate: {
+        slide: 'slide 100ms linear forwards'
+      }
     },
   },
   plugins: [],

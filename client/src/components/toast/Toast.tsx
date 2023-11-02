@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useEffect } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
+import { useDispatch } from 'react-redux'
+import { setToast } from '../../redux/slice/global'
 
 export enum ToastType {
   Success,
@@ -8,23 +10,28 @@ export enum ToastType {
   Info,
 }
 
-export type IToast = {
-  text: string
-  onClose?: () => void
+interface IToast {
+  message: string
   duration?: number
   type?: ToastType
 }
 
 const Toast = (props: IToast) => {
-  const { text, onClose, duration, type } = props
+  const { message, duration, type } = props
+
+  const dispatch = useDispatch()
+
+  const onClose = useCallback(() => {
+    dispatch(setToast({ message: '' }))
+  }, [dispatch])
 
   useEffect(() => {
-    if (text && duration && onClose) {
+    if (message) {
       setTimeout(() => {
         onClose()
       }, duration)
     }
-  }, [duration, text, onClose])
+  }, [duration, message, onClose])
 
   const getToastBgColor = (toastType?: ToastType) => {
     switch (toastType) {
@@ -38,18 +45,20 @@ const Toast = (props: IToast) => {
     }
   }
 
+  if (!message) return <></>
+
   return (
-    <div className="absolute top-0 z-50 flex w-full justify-center">
+    <div className="fixed flex items-center max-w-xs w-full divide-gray-200 rounded-lg shadow divide-x bottom-5 right-5 justify-center">
       <div
         data-test-id="toastMsg"
         id="toast-default"
         className={`${getToastBgColor(
           type
-        )} flex w-full animate-slide items-center justify-between gap-2 p-4 text-white shadow-md`}
+        )} flex max-w-xs animate-slide divide-gray-200 rounded-lg divide-x items-center justify-between gap-1 p-4 text-white shadow-md`}
         role="alert"
       >
-        <div className="text-center text-xs font-normal">{text}</div>
-        <div className="cursor-pointer" onClick={onClose}>
+        <p className="text-center text-xs font-normal">{message}</p>
+        <div className="cursor-pointer pl-1" onClick={onClose}>
           <AiOutlineCloseCircle size={20} />
         </div>
       </div>

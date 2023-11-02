@@ -3,8 +3,13 @@ import { InputBox } from '../../components/input-box/InputBox'
 import logo from '../../assets/icon/logo.svg'
 import Button from '../../components/button/Button'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setToast } from '../../redux/slice/global'
+import { ToastType } from '../../components/toast/Toast'
 
 const Login = () => {
+  const dispatch = useDispatch()
+
   const [input, setInput] = React.useState<{ email: string; password: string }>(
     {
       email: '',
@@ -19,15 +24,46 @@ const Login = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    if (name === 'email' && !validateEmail(value)) {
-      console.log('Invalid email')
-      return
+    setInput((prev) => ({ ...prev, [name]: value.trim() }))
+  }
+
+  const valideInput = () => {
+    if (!input.email) {
+      dispatch(
+        setToast({
+          message: 'Please enter your email',
+          type: ToastType.Failure,
+          duration: 3000,
+        })
+      )
+      return false
+    } else if (!validateEmail(input.email)) {
+      dispatch(
+        setToast({
+          message: 'Please enter a valid email',
+          type: ToastType.Failure,
+          duration: 3000,
+        })
+      )
+      return false
     }
-    setInput((prev) => ({ ...prev, [name]: value }))
+    if (!input.password) {
+      dispatch(
+        setToast({
+          message: 'Please enter your password',
+          type: ToastType.Failure,
+          duration: 3000,
+        })
+      )
+      return false
+    }
+    return true
   }
 
   const handleLogin = () => {
-    console.log('Login')
+    if (valideInput()) {
+      console.log('Login')
+    }
   }
 
   return (
