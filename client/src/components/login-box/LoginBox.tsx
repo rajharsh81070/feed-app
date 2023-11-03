@@ -7,7 +7,7 @@ interface LoginBoxProps {
   handleLogin: () => void
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   formData: {
-    email: string
+    emailOrUsername: string
     password: string
   }
 }
@@ -29,12 +29,12 @@ const LoginBox = (props: LoginBoxProps) => {
         <div className="flex flex-col gap-5">
           <div className="flex flex-col items-start gap-4">
             <InputBox
-              id="email"
-              value={formData.email}
+              id="emailOrUsername"
+              value={formData.emailOrUsername}
               primaryLabel="Email or Username"
-              name="email"
+              name="emailOrUsername"
               placeholder="Enter your email or username"
-              type="email"
+              type="text"
               required={true}
               onInputChange={handleInputChange}
             />

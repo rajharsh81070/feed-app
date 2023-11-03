@@ -6,6 +6,7 @@ import Toast from '../components/toast/Toast'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import Register from './register/Register'
+import Feed from './feed/Feed'
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
+    element: <Feed />,
     errorElement: <NotFound />,
   },
 ])

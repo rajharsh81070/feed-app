@@ -9,10 +9,10 @@ const Login = () => {
   const dispatch = useDispatch()
 
   const [formData, setFormData] = React.useState<{
-    email: string
+    emailOrUsername: string
     password: string
   }>({
-    email: '',
+    emailOrUsername: '',
     password: '',
   })
 
@@ -22,10 +22,10 @@ const Login = () => {
   }
 
   const valideLoginInput = () => {
-    if (!formData.email) {
+    if (!formData.emailOrUsername) {
       dispatch(
         setToast({
-          message: 'Please enter your email',
+          message: 'Please enter your Email or Username',
           type: ToastType.Failure,
           duration: 3000,
         })
