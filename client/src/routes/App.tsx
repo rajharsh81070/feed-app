@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import Register from './register/Register'
 import Feed from './feed/Feed'
+import { ThemeProvider } from '@material-tailwind/react'
 
 const router = createBrowserRouter([
   {
@@ -30,14 +31,14 @@ const App = () => {
   const { toast } = useSelector((state: RootState) => state.globalState)
 
   return (
-    <>
+    <ThemeProvider>
       <RouterProvider router={router} />
       <Toast
         duration={toast.duration}
         message={toast.message}
         type={toast.type}
       />
-    </>
+    </ThemeProvider>
   )
 }
 
