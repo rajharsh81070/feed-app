@@ -3,6 +3,7 @@ import React from 'react'
 import ReactionPopover from '../../components/reaction-popover/ReactionPopover'
 import Button from '../../components/button/Button'
 import { ReactionsType } from '../../constants'
+import Spinner from '../../components/spinner/Spinner'
 
 const Feed: React.FC = () => {
   const [name, setName] = React.useState<string>('Harsh')
@@ -119,6 +120,13 @@ const Feed: React.FC = () => {
         <div className="flex flex-col flex-shrink gap-4">
           {renderCreatePost()}
           {renderPost()}
+          <div className="flex w-full items-center justify-center">
+            <div className="flex-grow border-t-[1px] border-solid border-[#7F8084]" />
+            <p className="mx-1 text-[#7F8084] text-base font-sans font-normal">
+              That's it!!
+            </p>
+            <div className="flex-grow border-t-[1px] border-solid border-[#7F8084]" />
+          </div>
         </div>
       </div>
     </div>
