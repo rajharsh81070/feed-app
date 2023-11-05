@@ -21,7 +21,7 @@ export const registerHandler = async (
 
     return res.status(201).json({
       status: 'success',
-      message: 'An email with a verification code has been sent to your email',
+      message: 'User registered successfully',
     })
   } catch (err: any) {
     if (err.code === 11000) {
@@ -40,10 +40,12 @@ export const loginHandler = async (
   next: NextFunction
 ) => {
   try {
-    // Get the user from the collection
-    const user = await findUser({ email: req.body.emailOrUserName })
+    let user = await findUser({ email: req.body.emailOrUserName })
 
-    // Check if user exist and password is correct
+    if (!user) {
+      user = await findUser({ userName: req.body.emailOrUserName })
+    }
+
     if (
       !user ||
       !(await user.comparePasswords(user.password, req.body.password))
@@ -51,13 +53,10 @@ export const loginHandler = async (
       return next(new AppError('Invalid email or password', 401))
     }
 
-    // Create the Access and refresh Tokens
-    const { access_token, refresh_token } = await signToken(user)
+    const { access_token } = await signToken(user)
 
-    // Send Access Token in Header
     res.set('Authorization', `Bearer ${access_token}`)
 
-    // Send Access Token
     res.status(200).json({
       status: 'success',
       access_token,
@@ -67,18 +66,12 @@ export const loginHandler = async (
   }
 }
 
-// Refresh tokens
-const logout = (res: Response) => {
-  res.set('Authorization', '')
-}
-
 export const logoutHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    logout(res)
     res.status(200).json({ status: 'Logout Successfull' })
   } catch (err: any) {
     next(err)
