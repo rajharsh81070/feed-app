@@ -21,20 +21,16 @@ export const deserializeUser = async (
       return next(new AppError('You are not logged in', 401))
     }
 
-    const decoded = verifyJwt<{ id: string }>(
-      access_token,
-      'ACCESS_TOKEN_PUBLIC_KEY'
-    )
+    const decoded = verifyJwt<{ id: string; exp: string }>(access_token)
 
     if (!decoded) {
       return next(new AppError(`Invalid token or user doesn't exist`, 401))
     }
 
-    // if (!decoded) {
-    //   return next(new AppError(`User session has expired`, 401))
-    // }
+    if (Number(decoded.exp) * 1000 < new Date().getTime()) {
+      return next(new AppError(`User session has expired`, 401))
+    }
 
-    // Check if user still exist
     const user = await findUserById(decoded.id)
 
     if (!user) {
