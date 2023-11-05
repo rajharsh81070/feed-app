@@ -1,37 +1,18 @@
 import jwt, { SignOptions } from 'jsonwebtoken'
 
-export const signJwt = (
-  payload: Object,
-  key: 'ACCESS_TOKEN_PRIVATE_KEY' | 'ACCESS_TOKEN_PUBLIC_KEY',
-  options: SignOptions = {}
-) => {
-  const privateKey = Buffer.from(
-    process.env[`${key}`] || '',
-    'base64'
-  ).toString('ascii')
+export const signJwt = (payload: Object, options: SignOptions = {}) => {
+  const privateKey = process.env[`JWT_SECRET`] || ''
   return jwt.sign(payload, privateKey, {
     ...(options && options),
-    algorithm: 'RS256',
+    algorithm: 'HS256',
   })
 }
 
-export const verifyJwt = <T>(
-  token: string,
-  key: 'ACCESS_TOKEN_PRIVATE_KEY' | 'ACCESS_TOKEN_PUBLIC_KEY'
-): T | null => {
+export const verifyJwt = <T>(token: string): T | null => {
   try {
-    const publicKey = Buffer.from(
-      process.env[`${key}`] || '',
-      'base64'
-    ).toString('ascii')
-    const decoded = jwt.verify(token, publicKey, (err, decoded) => {
-      if (err) {
-        return null
-      }
-      return decoded
-    })
+    const publicKey = process.env[`JWT_SECRET`] || ''
 
-    return decoded as T
+    return jwt.verify(token, publicKey) as T
   } catch (error) {
     return null
   }

@@ -30,9 +30,12 @@ export const findAndUpdateUser = async (
 }
 
 export const signToken = async (user: DocumentType<User>) => {
-  const access_token = signJwt({ sub: user.id }, 'ACCESS_TOKEN_PRIVATE_KEY', {
-    expiresIn: `180 days`,
-  })
+  const access_token = signJwt(
+    { id: user.id },
+    {
+      expiresIn: `9 days`,
+    }
+  )
 
   return { access_token }
 }

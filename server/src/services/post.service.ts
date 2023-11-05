@@ -1,6 +1,29 @@
 import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose'
 import postModel, { Post } from '../models/post.model'
 import { User } from '../models/user.model'
+import { omit } from 'lodash'
+import { post } from '@typegoose/typegoose'
+
+const parsePost = (post: Post | null) => {
+  if (!post) return null
+
+  const newPost = omit(post, ['_id', '__v'])
+  return {
+    ...newPost,
+    user:
+      typeof newPost?.user === 'object'
+        ? {
+            ...omit(newPost.user, ['_id', '__v', 'password']),
+            userName: newPost.isAnonymous
+              ? 'Anonymous'
+              : (newPost.user as User)['userName'],
+            email: newPost.isAnonymous
+              ? 'Anonymous'
+              : (newPost.user as User)['email'],
+          }
+        : newPost.user,
+  }
+}
 
 export const createPost = async ({
   input,
@@ -13,22 +36,36 @@ export const createPost = async ({
 }
 
 export const findPostById = async (id: string) => {
-  return postModel.findById(id).lean()
+  return parsePost(
+    await postModel
+      .findById(id)
+      .populate('user')
+      .lean()
+      .exec()
+      .then((post) => JSON.parse(JSON.stringify(post)))
+  )
 }
 
-export const findAllPosts = async (isAnonymous?: boolean) => {
-  if (isAnonymous !== undefined) {
-    return postModel.find({ isAnonymous }).populate('user')
-  }
-  return (await postModel.find().populate('user')).map(parsePost)
+export const findAllPosts = async (isAnonymous: boolean) => {
+  const posts = (
+    await postModel.find({ isAnonymous }).populate('user').lean().exec()
+  ).map((post) => JSON.parse(JSON.stringify(post)))
+
+  return posts.map(parsePost)
 }
 
-export const findAllPostsByUser = async (user: Partial<User>) => {
-  return await postModel
-    .find({
-      user,
-    })
-    .populate('user')
+export const findAllPostsByUser = async (user_id: string) => {
+  const posts = (
+    await postModel
+      .find({
+        user: user_id,
+      })
+      .populate('user')
+      .lean()
+      .exec()
+  ).map((post) => JSON.parse(JSON.stringify(post)))
+
+  return posts.map(parsePost)
 }
 
 export const findPost = async (
@@ -43,21 +80,18 @@ export const findAndUpdatePost = async (
   update: UpdateQuery<Post>,
   options: QueryOptions
 ) => {
-  return await postModel.findOneAndUpdate(query, update, options).lean()
+  return parsePost(
+    await postModel
+      .findOneAndUpdate(query, update, options)
+      .populate('user')
+      .lean()
+      .then((post) => JSON.parse(JSON.stringify(post)))
+  )
 }
 
 export const findOneAndDelete = async (
   query: FilterQuery<Post>,
   options: QueryOptions = {}
 ) => {
-  return await postModel.findOneAndDelete(query, options)
+  return await postModel.findOneAndDelete(query, options).lean().exec()
 }
-
-const parsePost = (post: Post) => ({
-  ...post,
-  user: {
-    ...post.user,
-    userName: post.isAnonymous ? 'Anonymous' : (post.user as User)['userName'],
-    email: post.isAnonymous ? 'Anonymous' : (post.user as User)['email'],
-  },
-})

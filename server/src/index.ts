@@ -1,5 +1,5 @@
+require('dotenv').config()
 import express, { Express, NextFunction, Request, Response } from 'express'
-import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import morgan from 'morgan'
@@ -7,8 +7,6 @@ import connectDB from './utils/connectDB'
 import userRouter from './routes/user.route'
 import authRouter from './routes/auth.route'
 import postRouter from './routes/post.route'
-
-dotenv.config()
 
 const app: Express = express()
 const port = process.env.PORT
@@ -29,7 +27,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/posts', postRouter)
 
 app.get(
-  '/api/healthChecker',
+  '/api/healthcheck',
   (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({
       status: 'success',
