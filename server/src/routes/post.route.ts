@@ -3,6 +3,7 @@ import {
   createPostHandler,
   deletePostHandler,
   getPostHandler,
+  getPostsByUserHandler,
   getPostsHandler,
   updatePostHandler,
 } from '../controllers/post.controller'
@@ -26,7 +27,7 @@ router.route('').get(getPostsHandler)
 
 router
   .route('/user/:userId')
-  .get(validate(getPostsByUserSchema), getPostsHandler)
+  .get(validate(getPostsByUserSchema), getPostsByUserHandler)
 
 router
   .route('/:postId')
