@@ -35,12 +35,6 @@ export const createPostHandler = async (
       },
     })
   } catch (err: any) {
-    if (err.code === '23505') {
-      return res.status(409).json({
-        status: 'fail',
-        message: 'Post with that title already exist',
-      })
-    }
     next(err)
   }
 }
@@ -80,7 +74,7 @@ export const getPostsByUserHandler = async (
       return next(new AppError('User with that ID not found', 404))
     }
 
-    const posts = await findAllPostsByUser(user)
+    const posts = await findAllPostsByUser(user.id)
 
     res.status(200).json({
       status: 'success',
@@ -100,13 +94,16 @@ export const getPostsHandler = async (
 ) => {
   try {
     const { postType } = req.query
+
     const showAllPost = postType === PostType.All
     const showNonAnonymousPost = postType === PostType.NonAnoymous
+    const annonymousPost = await findAllPosts(true)
+    const nonAnnonymousPost = await findAllPosts(false)
     const posts = showAllPost
-      ? await findAllPosts()
+      ? [...annonymousPost, ...nonAnnonymousPost]
       : showNonAnonymousPost
-      ? await findAllPosts(false)
-      : await findAllPosts(true)
+      ? nonAnnonymousPost
+      : annonymousPost
 
     res.status(200).json({
       status: 'success',
