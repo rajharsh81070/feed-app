@@ -14,7 +14,7 @@ export const loginUserSchema = object({
   body: object({
     emailOrUserName: string({
       required_error: 'Email or Username is required',
-    }).email('Invalid Email/Username or password'),
+    }),
     password: string({ required_error: 'Password is required' }),
   }),
 })
