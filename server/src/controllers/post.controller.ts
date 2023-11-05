@@ -24,7 +24,7 @@ export const createPostHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user_id = res.locals.user._id
+    const user_id = res.locals.user.id
 
     const post = await createPost({ input: req.body, user_id })
 

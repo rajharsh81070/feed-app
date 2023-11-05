@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
+import { omit } from 'lodash'
+import { commonKeysToExclude } from '../constants'
 
 export const getMeHandler = (
   req: Request,
@@ -6,7 +8,7 @@ export const getMeHandler = (
   next: NextFunction
 ) => {
   try {
-    const user = res.locals.user
+    const user = omit(res.locals.user, [...commonKeysToExclude, 'password'])
     res.status(200).json({
       status: 'success',
       data: {

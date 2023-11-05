@@ -3,8 +3,6 @@ import { CreateUserInput, LoginUserInput } from '../schema/user.schema'
 import { createUser, findUser, signToken } from '../services/user.service'
 import AppError from '../utils/appError'
 
-export const excludedFields = ['password']
-
 export const registerHandler = async (
   req: Request<{}, {}, CreateUserInput>,
   res: Response,

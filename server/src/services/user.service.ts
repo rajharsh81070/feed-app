@@ -1,7 +1,6 @@
 import { omit } from 'lodash'
 import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose'
 import userModel, { User } from '../models/user.model'
-import { excludedFields } from '../controllers/auth.controller'
 import { signJwt } from '../utils/jwt'
 import { DocumentType } from '@typegoose/typegoose'
 
@@ -11,7 +10,7 @@ export const createUser = async (input: Partial<User>) => {
 
 export const findUserById = async (id: string) => {
   const user = await userModel.findById(id).lean()
-  return omit(user, excludedFields)
+  return omit(user, 'password')
 }
 
 export const findUser = async (

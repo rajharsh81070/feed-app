@@ -2,18 +2,18 @@ import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose'
 import postModel, { Post } from '../models/post.model'
 import { User } from '../models/user.model'
 import { omit } from 'lodash'
-import { post } from '@typegoose/typegoose'
+import { commonKeysToExclude } from '../constants'
 
 const parsePost = (post: Post | null) => {
   if (!post) return null
 
-  const newPost = omit(post, ['_id', '__v'])
+  const newPost = omit(post, commonKeysToExclude)
   return {
     ...newPost,
     user:
       typeof newPost?.user === 'object'
         ? {
-            ...omit(newPost.user, ['_id', '__v', 'password']),
+            ...omit(newPost.user, [...commonKeysToExclude, 'password']),
             userName: newPost.isAnonymous
               ? 'Anonymous'
               : (newPost.user as User)['userName'],
