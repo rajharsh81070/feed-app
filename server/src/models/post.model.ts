@@ -9,16 +9,13 @@ import {
 } from '@typegoose/typegoose'
 import { User } from './user.model'
 
-@pre<Post>('save', function (next) {
+@pre<Post>('save', async function (next) {
   this.id = this._id
   next()
 })
 @modelOptions({
   schemaOptions: {
-    timestamps: {
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-    },
+    timestamps: true,
   },
   options: {
     allowMixed: Severity.ALLOW,
