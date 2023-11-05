@@ -6,14 +6,15 @@ import Button from '../button/Button'
 interface LoginBoxProps {
   handleLogin: () => void
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  isLoading: boolean
   formData: {
-    emailOrUsername: string
+    emailOrUserName: string
     password: string
   }
 }
 
 const LoginBox = (props: LoginBoxProps) => {
-  const { handleLogin, handleInputChange, formData } = props
+  const { handleLogin, handleInputChange, formData, isLoading } = props
 
   return (
     <div className="m-3 sm:flex-shrink-0 bg-[#27292D] border-2 rounded-lg border-solid border-[#969696] flex py-10 px-6 justify-center">
@@ -29,10 +30,10 @@ const LoginBox = (props: LoginBoxProps) => {
         <div className="flex flex-col gap-5">
           <div className="flex flex-col items-start gap-4">
             <InputBox
-              id="emailOrUsername"
-              value={formData.emailOrUsername}
+              id="emailOrUserName"
+              value={formData.emailOrUserName}
               primaryLabel="Email or Username"
-              name="emailOrUsername"
+              name="emailOrUserName"
               placeholder="Enter your email or username"
               type="text"
               required={true}
@@ -52,7 +53,11 @@ const LoginBox = (props: LoginBoxProps) => {
             />
           </div>
           <div className="flex flex-col gap-3 items-start">
-            <Button label="Login Now" onClick={handleLogin} />
+            <Button
+              isLoading={isLoading}
+              label="Login Now"
+              onClick={handleLogin}
+            />
             <div className="flex">
               <p className="text-[#7F8084] text-sm font-medium">
                 Not registered yet?&nbsp;

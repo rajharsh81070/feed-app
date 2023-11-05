@@ -1,27 +1,27 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import globalReducer from './slice/global'
-// import { authApi } from './api/authApi';
-// import { postApi } from './api/postApi';
-// import { userApi } from './api/userApi';
-// import userReducer from './features/userSlice';
-// import postReducer from './features/postSlice';
+import globalReducer from './slice/global.slice'
+import { authApi } from '../api/auth.api'
+import { postApi } from '../api/post.api'
+import { userApi } from '../api/user.api'
+import userReducer from './slice/user.slice'
+import postReducer from './slice/post.slice'
 
 export const store = configureStore({
   reducer: {
-    // [authApi.reducerPath]: authApi.reducer,
-    // [userApi.reducerPath]: userApi.reducer,
-    // [postApi.reducerPath]: postApi.reducer,
-    // userState: userReducer,
-    // postState: postReducer,
+    [authApi.reducerPath]: authApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
+    [postApi.reducerPath]: postApi.reducer,
+    userState: userReducer,
+    postState: postReducer,
     globalState: globalReducer,
   },
   devTools: process.env.NODE_ENV === 'development',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({}).concat([
-      // authApi.middleware,
-      // userApi.middleware,
-      // postApi.middleware,
+      authApi.middleware,
+      userApi.middleware,
+      postApi.middleware,
     ]),
 })
 

@@ -1,11 +1,14 @@
+import Spinner from '../spinner/Spinner'
+
 export interface IButtonProps {
   label: string
   disabled?: boolean
   onClick?: () => void
+  isLoading?: boolean
 }
 
 const Button = (props: IButtonProps) => {
-  const { label, onClick, disabled } = props
+  const { label, onClick, disabled, isLoading } = props
 
   return (
     <button
@@ -17,9 +20,15 @@ const Button = (props: IButtonProps) => {
           : 'cursor-pointer opacity-100 hover:bg-blue-700'
       }`}
     >
-      <p className="text-[#FFF] font-medium font-sans text-base text-center leading-none">
-        {label}
-      </p>
+      {isLoading ? (
+        <div className="flex justify-center items-center">
+          <Spinner size={20} containerHeight="max-h-min" />
+        </div>
+      ) : (
+        <p className="text-[#FFF] font-medium font-sans text-base text-center leading-none">
+          {label}
+        </p>
+      )}
     </button>
   )
 }

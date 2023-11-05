@@ -8,21 +8,34 @@ import { RootState } from '../redux/store'
 import Register from './register/Register'
 import Feed from './feed/Feed'
 import { ThemeProvider } from '@material-tailwind/react'
+import AuthMiddleware from '../middleware/AuthMiddleware'
 
 const router = createBrowserRouter([
   {
     path: '/login',
-    element: <Login />,
+    element: (
+      <AuthMiddleware>
+        <Login />
+      </AuthMiddleware>
+    ),
     errorElement: <NotFound />,
   },
   {
     path: '/register',
-    element: <Register />,
+    element: (
+      <AuthMiddleware>
+        <Register />
+      </AuthMiddleware>
+    ),
     errorElement: <NotFound />,
   },
   {
     path: '/',
-    element: <Feed />,
+    element: (
+      <AuthMiddleware>
+        <Feed />
+      </AuthMiddleware>
+    ),
     errorElement: <NotFound />,
   },
 ])

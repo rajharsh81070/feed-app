@@ -1,18 +1,26 @@
 import React from 'react'
 import logo from '../../assets/icon/logo.svg'
 import { useDispatch } from 'react-redux'
-import { setToast } from '../../redux/slice/global'
+import { setToast } from '../../redux/slice/global.slice'
 import { ToastType } from '../../components/toast/Toast'
 import RegisterBox from '../../components/register-box/RegisterBox'
+import { useRegisterUserMutation } from '../../api/auth.api'
+import { useNavigate } from 'react-router-dom'
+
+export interface IRegisterInput {
+  email: string
+  userName: string
+  password: string
+}
 
 const Register = () => {
   const dispatch = useDispatch()
 
-  const [formData, setFormData] = React.useState<{
-    email: string
-    userName: string
-    password: string
-  }>({
+  const navigate = useNavigate()
+
+  const [registerUser, { isLoading }] = useRegisterUserMutation()
+
+  const [formData, setFormData] = React.useState<IRegisterInput>({
     email: '',
     userName: '',
     password: '',
@@ -59,7 +67,29 @@ const Register = () => {
 
   const handleRegister = () => {
     if (valideRegisterInput()) {
-      console.log('Register')
+      registerUser(formData).then((res) => {
+        const { data, error } = res as any
+        if (data) {
+          dispatch(
+            setToast({
+              message: 'Register successfull',
+              type: ToastType.Success,
+              duration: 3000,
+            })
+          )
+          navigate('/login')
+        }
+        if (error) {
+          dispatch(
+            setToast({
+              message:
+                error?.data?.error?.[0]?.message || 'Something went wrong',
+              type: ToastType.Failure,
+              duration: 3000,
+            })
+          )
+        }
+      })
     }
   }
 
@@ -68,6 +98,7 @@ const Register = () => {
       <div className="flex flex-col items-center justify-center gap-12">
         <img src={logo} alt="logo" />
         <RegisterBox
+          isLoading={isLoading}
           handleRegister={handleRegister}
           handleInputChange={handleInputChange}
           formData={formData}

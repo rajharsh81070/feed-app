@@ -157,7 +157,7 @@ export const deletePostHandler = async (
 
     res.status(204).json({
       status: 'success',
-      data: null,
+      message: 'Post deleted successfully',
     })
   } catch (err: any) {
     next(err)

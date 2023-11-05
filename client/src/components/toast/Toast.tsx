@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { useEffect } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { useDispatch } from 'react-redux'
-import { setToast } from '../../redux/slice/global'
+import { setToast } from '../../redux/slice/global.slice'
 
 export enum ToastType {
   Success,

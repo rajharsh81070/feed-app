@@ -1,9 +1,24 @@
 import React from 'react'
 
-const Spinner: React.FC = () => {
+interface SpinnerProps {
+  size: number
+  containerHeight?: string
+}
+
+const Spinner: React.FC<SpinnerProps> = ({ size = 32, containerHeight }) => {
   return (
-    <div className="bg-[#131319] flex items-center justify-center h-screen">
-      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 shadow-md border-[#bbb3b3]"></div>
+    <div
+      className={`flex items-center justify-center ${
+        containerHeight ? containerHeight : 'h-screen'
+      }`}
+    >
+      <div
+        style={{
+          height: `${size}px`,
+          width: `${size}px`,
+        }}
+        className={`animate-spin rounded-full border-t-2 border-b-2 border-[#bbb3b3] h-8 w-8`}
+      />
     </div>
   )
 }

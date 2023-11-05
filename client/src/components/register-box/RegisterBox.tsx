@@ -5,6 +5,7 @@ import Button from '../button/Button'
 
 interface RegisterBoxProps {
   handleRegister: () => void
+  isLoading: boolean
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   formData: {
     email: string
@@ -14,7 +15,7 @@ interface RegisterBoxProps {
 }
 
 const RegisterBox = (props: RegisterBoxProps) => {
-  const { handleRegister, handleInputChange, formData } = props
+  const { handleRegister, handleInputChange, formData, isLoading } = props
 
   return (
     <div className="m-3 sm:flex-shrink-0 bg-[#27292D] border-2 rounded-lg border-solid border-[#969696] flex py-10 px-6 justify-center">
@@ -61,7 +62,11 @@ const RegisterBox = (props: RegisterBoxProps) => {
             />
           </div>
           <div className="flex flex-col gap-3 items-start">
-            <Button label="Continue" onClick={handleRegister} />
+            <Button
+              isLoading={isLoading}
+              label="Continue"
+              onClick={handleRegister}
+            />
             <div className="flex">
               <p className="text-[#7F8084] text-sm font-medium">
                 Already have an account?&nbsp;

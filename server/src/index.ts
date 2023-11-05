@@ -7,6 +7,7 @@ import connectDB from './utils/connectDB'
 import userRouter from './routes/user.route'
 import authRouter from './routes/auth.route'
 import postRouter from './routes/post.route'
+import path from 'path'
 
 const app: Express = express()
 const port = process.env.PORT

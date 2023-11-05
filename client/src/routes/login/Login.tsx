@@ -1,18 +1,24 @@
 import React from 'react'
 import logo from '../../assets/icon/logo.svg'
 import { useDispatch } from 'react-redux'
-import { setToast } from '../../redux/slice/global'
+import { setToast } from '../../redux/slice/global.slice'
 import { ToastType } from '../../components/toast/Toast'
 import LoginBox from '../../components/login-box/LoginBox'
+import { useLoginUserMutation } from '../../api/auth.api'
+import { redirect } from 'react-router-dom'
+
+export interface ILoginInput {
+  emailOrUserName: string
+  password: string
+}
 
 const Login = () => {
   const dispatch = useDispatch()
 
-  const [formData, setFormData] = React.useState<{
-    emailOrUsername: string
-    password: string
-  }>({
-    emailOrUsername: '',
+  const [loginUser, { isLoading }] = useLoginUserMutation()
+
+  const [formData, setFormData] = React.useState<ILoginInput>({
+    emailOrUserName: '',
     password: '',
   })
 
@@ -22,7 +28,7 @@ const Login = () => {
   }
 
   const valideLoginInput = () => {
-    if (!formData.emailOrUsername) {
+    if (!formData.emailOrUserName) {
       dispatch(
         setToast({
           message: 'Please enter your Email or Username',
@@ -47,7 +53,29 @@ const Login = () => {
 
   const handleLogin = () => {
     if (valideLoginInput()) {
-      console.log('Login')
+      loginUser(formData).then((res) => {
+        const { data, error } = res as any
+        if (data) {
+          dispatch(
+            setToast({
+              message: 'Login successfully',
+              type: ToastType.Success,
+              duration: 3000,
+            })
+          )
+          redirect('/')
+        }
+        if (error) {
+          dispatch(
+            setToast({
+              message:
+                error?.data?.error?.[0]?.message || 'Something went wrong',
+              type: ToastType.Failure,
+              duration: 3000,
+            })
+          )
+        }
+      })
     }
   }
 
@@ -56,6 +84,7 @@ const Login = () => {
       <div className="flex flex-col items-center justify-center gap-12">
         <img src={logo} alt="logo" />
         <LoginBox
+          isLoading={isLoading}
           handleLogin={handleLogin}
           handleInputChange={handleInputChange}
           formData={formData}

@@ -17,3 +17,13 @@ export const ReactionEmojis = {
   [ReactionsType.CHAT]: '💬',
   [ReactionsType.ADD]: '➕',
 }
+
+export const AccessToken = 'access_token'
+
+export const excludedRoutes = ['/login', '/register']
+
+export enum PostType {
+  Annoymous = 'annonymous',
+  NonAnoymous = 'nonannonymous',
+  All = 'all',
+}
