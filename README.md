@@ -39,7 +39,8 @@ npm run install
 2. Start the backend server:
 
 ```
-npm run start:backend:dev
+cd server
+npm run start
 ```
 
 3. Start the frontend app:
